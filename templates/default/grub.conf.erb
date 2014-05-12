@@ -1,0 +1,19 @@
+# This file has been generated here by the grub cookbook.
+#
+default=<%= node['grub']['default'] %>
+timeout=<%= node['grub']['timeout'] %>
+hiddenmenu
+<% if not node['grub']['splashimage'].empty? %>
+splashimage=<%= File.join(@grub_root, node['grub']['splashimage']) %>
+<% end %>
+<% if not node['grub']['terminal'].empty? %>
+terminal <%= node['grub']['terminal'] %>
+<% end %>
+<% @kernels.each do |kernel| %>
+title CentOS (<%= kernel %>)
+  root <%= @grub_root %>
+  kernel /vmlinuz-<%= kernel %> ro root=<%= @root %> crashkernel=auto <%= node['grub']['kernel']['append'] %>
+  initrd /initramfs-<%= kernel %>.img
+
+<% end %>
+
